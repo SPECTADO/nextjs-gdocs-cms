@@ -1,8 +1,12 @@
 {
-  "name": "spectado-nextjs-gdocs-cms",
+  "name": "nextjs-gdocs-cms",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SPECTADO/nextjs-gdocs-cms"
+  },
   "scripts": {
     "test": "eslint index.js"
   },
