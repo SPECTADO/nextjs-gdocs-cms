@@ -1,21 +1,39 @@
-import replace from '@rollup/plugin-replace'
-import { terser } from 'rollup-plugin-terser'
+import replace from "@rollup/plugin-replace";
+import { terser } from "rollup-plugin-terser";
 
-import packageJson from './package.json'
+import packageJson from "./package.json";
 
 const BASE_UMD = {
-  format: 'umd',
-  name: 'nextjs-gdocs-cms'
-}
+  format: "umd",
+  name: "nextjs-gdocs-cms",
+  globals: {
+    dayjs: "dayjs",
+    "url-slug": "url-slug",
+    "node-html-markdown": "NodeHtmlMarkdown",
+    "lodash/isEmpty": "isEmpty",
+  },
+};
 
-export default [ {
-  input: 'src/index.js',
-  output: [{ file: packageJson.main, ...BASE_UMD }]
-}, {
-  input: 'src/index.js',
-  output: [{ file: packageJson.main.replace(/\.js$/, '.min.js'), ...BASE_UMD }],
-  plugins: [
-    replace({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) }),
-    terser()
-  ]
-}]
+const external = ["dayjs", "url-slug", "lodash/isEmpty", "node-html-markdown"];
+
+export default [
+  {
+    input: "src/index.js",
+    output: [{ file: packageJson.main, ...BASE_UMD }],
+    external,
+  },
+  {
+    input: "src/index.js",
+    output: [
+      { file: packageJson.main.replace(/\.js$/, ".min.js"), ...BASE_UMD },
+    ],
+    plugins: [
+      replace({
+        preventAssignment: true,
+        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+      }),
+      terser(),
+    ],
+    external,
+  },
+];

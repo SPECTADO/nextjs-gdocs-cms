@@ -1,8 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('lodash')) :
-  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'lodash'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global.urlSlug, global.nodeHtmlMarkdown, global.lodash));
-})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, lodash) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('lodash/isEmpty')) :
+  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'lodash/isEmpty'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global["url-slug"], global.NodeHtmlMarkdown, global.isEmpty));
+})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, isEmpty) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
@@ -59,7 +59,7 @@
   const parseDescriptionText = (string) => {
     const splitted = string && string.split(/(==[a-zA-Z]{2,3}==)/gim);
 
-    if (splitted && !lodash.isEmpty(splitted[0])) {
+    if (splitted && !isEmpty.isEmpty(splitted[0])) {
       return splitted[0].trim();
     }
 
