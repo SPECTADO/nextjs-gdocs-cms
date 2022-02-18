@@ -56,11 +56,11 @@ const parseTableData = async (fileData) => {
     res.text()
   );
 
-  const { data: csvData } = await readString(rawCsv);
+  const { data } = await readString(rawCsv);
 
   return {
     ...fileData,
-    csvData,
+    data,
     rawCsv,
   };
 };
