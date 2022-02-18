@@ -1,14 +1,13 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('csv-parse/lib/sync'), require('lodash/isEmpty')) :
-  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'csv-parse/lib/sync', 'lodash/isEmpty'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global["url-slug"], global.NodeHtmlMarkdown, global.CsvParser, global.isEmpty));
-})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, CsvParser, isEmpty) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('react-papaparse'), require('lodash/isEmpty')) :
+  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'react-papaparse', 'lodash/isEmpty'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global["url-slug"], global.NodeHtmlMarkdown, global.usePapaParse, global.isEmpty));
+})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, reactPapaparse, isEmpty) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var dayjs__default = /*#__PURE__*/_interopDefaultLegacy(dayjs);
   var urlSlug__default = /*#__PURE__*/_interopDefaultLegacy(urlSlug);
-  var CsvParser__default = /*#__PURE__*/_interopDefaultLegacy(CsvParser);
 
   const fetchDriveList = async (
     driveFolderId,
@@ -58,14 +57,12 @@
   };
 
   const parseTableData = async (fileData) => {
+    const { readString } = reactPapaparse.usePapaParse();
     const rawCsv = await fetch(fileData.exportLinks["text/csv"]).then((res) =>
       res.text()
     );
 
-    const csvData = CsvParser__default["default"](rawCsv, {
-      columns: true,
-      skip_empty_lines: true,
-    });
+    const { data: csvData } = await readString(rawCsv);
 
     return {
       ...fileData,

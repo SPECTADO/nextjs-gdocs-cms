@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import urlSlug from "url-slug";
 import { NodeHtmlMarkdown } from "node-html-markdown"; // NodeHtmlMarkdownOptions
-import CsvParser from "csv-parse/lib/sync";
+import { usePapaParse } from "react-papaparse";
 
 const fetchDriveList = async (
   driveFolderId,
@@ -51,14 +51,12 @@ const parseDocumentData = async (fileData) => {
 };
 
 const parseTableData = async (fileData) => {
+  const { readString } = usePapaParse();
   const rawCsv = await fetch(fileData.exportLinks["text/csv"]).then((res) =>
     res.text()
   );
 
-  const csvData = CsvParser(rawCsv, {
-    columns: true,
-    skip_empty_lines: true,
-  });
+  const { data: csvData } = await readString(rawCsv);
 
   return {
     ...fileData,
