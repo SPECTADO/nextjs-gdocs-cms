@@ -11,10 +11,17 @@ const BASE_UMD = {
     "url-slug": "url-slug",
     "node-html-markdown": "NodeHtmlMarkdown",
     "lodash/isEmpty": "isEmpty",
+    "csv-parse/lib/sync": "CsvParser",
   },
 };
 
-const external = ["dayjs", "url-slug", "lodash/isEmpty", "node-html-markdown"];
+const external = [
+  "dayjs",
+  "url-slug",
+  "lodash/isEmpty",
+  "node-html-markdown",
+  "csv-parse/lib/sync",
+];
 
 export default [
   {

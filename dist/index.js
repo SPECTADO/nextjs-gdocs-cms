@@ -1,13 +1,14 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('lodash/isEmpty')) :
-  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'lodash/isEmpty'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global["url-slug"], global.NodeHtmlMarkdown, global.isEmpty));
-})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, isEmpty) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('dayjs'), require('url-slug'), require('node-html-markdown'), require('csv-parse/lib/sync'), require('lodash/isEmpty')) :
+  typeof define === 'function' && define.amd ? define(['dayjs', 'url-slug', 'node-html-markdown', 'csv-parse/lib/sync', 'lodash/isEmpty'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global["nextjs-gdocs-cms"] = factory(global.dayjs, global["url-slug"], global.NodeHtmlMarkdown, global.CsvParser, global.isEmpty));
+})(this, (function (dayjs, urlSlug, nodeHtmlMarkdown, CsvParser, isEmpty) { 'use strict';
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
   var dayjs__default = /*#__PURE__*/_interopDefaultLegacy(dayjs);
   var urlSlug__default = /*#__PURE__*/_interopDefaultLegacy(urlSlug);
+  var CsvParser__default = /*#__PURE__*/_interopDefaultLegacy(CsvParser);
 
   const fetchDriveList = async (
     driveFolderId,
@@ -53,6 +54,23 @@
       ...fileData,
       mdText: nodeHtmlMarkdown.NodeHtmlMarkdown.translate(getHtml, {}),
       html: getHtml,
+    };
+  };
+
+  const parseTableData = async (fileData) => {
+    const rawCsv = await fetch(fileData.exportLinks["text/csv"]).then((res) =>
+      res.text()
+    );
+
+    const csvData = CsvParser__default["default"](rawCsv, {
+      columns: true,
+      skip_empty_lines: true,
+    });
+
+    return {
+      ...fileData,
+      csvData,
+      rawCsv,
     };
   };
 
@@ -140,6 +158,7 @@
   var index = {
     fetchDriveList,
     parseDocumentData,
+    parseTableData,
     fetchCalendarData,
     parseDescriptionText,
   };
