@@ -49,4 +49,21 @@ const parseDocumentData = async (fileData) => {
   };
 };
 
-export { fetchDriveList, parseDocumentData };
+const parseTableData = async (fileData) => {
+  const rawCsv = await fetch(fileData.exportLinks["text/csv"]).then((res) =>
+    res.text()
+  );
+
+  const csvData = CsvParser(rawCsv, {
+    columns: true,
+    skip_empty_lines: true,
+  });
+
+  return {
+    ...fileData,
+    csvData,
+    rawCsv,
+  };
+};
+
+export { fetchDriveList, parseDocumentData, parseTableData };
